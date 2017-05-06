@@ -22,7 +22,15 @@ app.get('/', function(req, res){
   res.render('index.ejs', {});
 });
 
+app.get('/about', function(req, res){
+  res.render('index.ejs', {});
+});
+
 app.get('/data', function(req, res){
+  res.render('data.ejs', {});
+});
+
+app.get('/input', function(req, res){
   console.log(req.header("dir"));
   console.log(req.header("speed"));
   console.log(req.header("node"));
