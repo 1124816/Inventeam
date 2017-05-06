@@ -1,0 +1,102 @@
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>Kenco</title>
+    <link rel="stylesheet" type="text/css" href="/data.css" />
+  </head>
+  <body style="width:100%;padding:0px;margin:0;">
+    <a href="/">Back</a>
+    <div id="door">
+      <h2 id="Number">1</h2>
+      <h3 id="timer1" onClick="timer()">0.0</h3>
+      <input type="numbers" id="hour" onKeyUp="timechangeh();"></input>
+      <input type="numbers" id="min" onKeyUp="timechangem();"></input>
+    </div>
+  <script src="/socket.io/socket.io.js"></script>
+  <script><%= data %><%= vars %></script>
+  <script>
+  var socket = io();
+  var base = data;
+  var number = document.location.href[document.location.href.length-1]-1;
+  document.getElementById('Number').innerHTML = number+1;
+  var timers = document.getElementById('timer1');
+  var door = document.getElementById('door');
+  var interval = 0;
+  var hourstime = 0;
+  var mintime = 0;
+  var finishtime = 0;
+  var color = "#008000";
+
+
+  var timechangeh = function() {
+    hourstime = parseInt(document.getElementById('hour').value)*60;
+    finishtime = hourstime + mintime;
+    console.log(finishtime);
+  };
+
+  var timechangem = function() {
+    mintime = parseInt(document.getElementById('min').value);
+    finishtime = hourstime + mintime;
+    console.log(finishtime);
+  };
+
+  var starttimer = function() {
+    interval = window.setInterval(function() {
+      elapsed = Math.floor((new Date().getTime() - base[number][1])/1000);
+      color = "#" + Math.floor(((elapsed/60)/finishtime)*128).toString(16) + Math.floor((128 - ((elapsed/60)/finishtime)*128)).toString(16) +"00";
+      //console.log(Math.floor(((elapsed/60)/finishtime)*128).toString(16));
+      //console.log(Math.floor(128 - (((elapsed/60)/finishtime)*128)).toString(16));
+      //console.log(color);
+      door.style.background = color;
+      min = Math.floor(elapsed/60);
+      hour = Math.floor(min/60);
+      elapsed = elapsed - (min*60);
+      min = min - (hour*60);
+
+      timers.innerHTML = hour + ":" + min + ":" +elapsed;
+    }, 100);
+  };
+
+  if(base[number][0] == 1) {
+    var time = base[number][1];
+    console.log(time);
+    starttimer();
+  };
+
+  var time = 0;
+  var elapsed = '0.0';
+
+  socket.on('upstart',function(msg) {
+    if(base[number][0] == 0 && msg[number][0] == 1) {
+      base = msg;
+      starttimer();
+    };
+  });
+
+  socket.on('upend',function(msg) {
+    if(base[number][0] == 1 && msg[number][0] == 0) {
+      timers.innerHTML = "0:0:0";
+      base = msg
+      clearInterval(interval);
+    };
+  });
+
+  var timer = function() {
+    if(base[number][0] == 0) {
+      var time = new Date().getTime();
+      socket.emit("time", [number, time]);
+      base[number][1] = time;
+      base[number][0] = 1;
+      starttimer();
+    } else {
+      base[number][0] = 0;
+      base[number][1] = new Date().getTime()
+      socket.emit("end", [number, base[number][1]]);
+      timers.innerHTML = "0:0:0";;
+      clearInterval(interval);
+    };
+  };
+
+  </script>
+  </body>
+</html>

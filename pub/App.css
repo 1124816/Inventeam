@@ -1,0 +1,9 @@
+#mapid {
+   height: 80%;
+   width: 60%;
+   position: absolute; left: 20%; top: 19%;
+ }
+ h1 {
+   text-align: center;
+   margin-top: 2%;
+ }

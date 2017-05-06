@@ -1,0 +1,49 @@
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>Kenco</title>
+    <link rel="stylesheet" type="text/css" href="App.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.3/dist/leaflet.css" />
+  </head>
+  <body style="width:100%;padding:0px;margin:0;">
+  <h1>Inventeam</h1>
+  <div id="mapid"></div>
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="https://unpkg.com/leaflet@1.0.3/dist/leaflet.js"></script>
+  <script>
+  var mymap = L.map('mapid').setView([35.048, -85.31], 14.5);
+  var stations = {"bob":[[35.048353, -85.31035], false], "tim":[[35.047002, -85.31031], false], "jim":[[35.050857, -85.310487], false ], "herb":[[35.049579, -85.310404], false]};
+
+  L.tileLayer('https://api.mapbox.com/styles/v1/mapbox/streets-v10/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWVpczExMjQ4MTYiLCJhIjoiY2owNDM5NGtyMGRobjMybHNjMmhwdWlmeCJ9.k9GrsRyZd771jT0BEumf7g', {
+    attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
+    maxZoom: 18,
+    id: 'your.mapbox.project.id',
+    accessToken: 'your.mapbox.public.access.token'
+}).addTo(mymap);
+var nobike = L.icon({
+    iconUrl: 'nobike.png',
+    iconSize: [30, 60],
+    popupAnchor: [0, -25]
+});
+var bike = L.icon({
+    iconUrl: 'bike.png',
+    iconSize: [30, 60],
+    popupAnchor: [0, -25]
+});
+
+for(i in stations) {
+  stations[i].push(L.marker([stations[i][0][0], stations[i][0][1]], {"riseOnHover":true, "icon": nobike}).addTo(mymap));
+  stations[i].push(stations[i][2].bindPopup('Lots O\' bikes', {"autoClose": false}));
+};
+
+  var socket = io();
+
+  socket.on('bike',function(msg) {
+    console.log("bob");
+    stations[msg.node][3].setIcon(bike)
+    window.setTimeout(function(){stations[msg.node][2].setIcon(nobike)}, 600);
+  });
+
+  </script>
+  </body>
+</html>

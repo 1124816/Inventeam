@@ -1,0 +1,13 @@
+{
+  "name": "inventeam",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "author": "Elias Basler",
+  "dependencies": {
+    "express": "*",
+    "mongoose": "*",
+    "socketio":"*",
+    "ejs": "*"
+  }
+}
