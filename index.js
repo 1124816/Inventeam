@@ -23,7 +23,7 @@ app.get('/', function(req, res){
 });
 
 app.get('/about', function(req, res){
-  res.render('index.ejs', {});
+  res.render('about.ejs', {});
 });
 
 app.get('/data', function(req, res){
