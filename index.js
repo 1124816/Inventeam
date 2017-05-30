@@ -3,18 +3,18 @@ var app = express();
 var http = require('http').Server(app);
 var path = require('path');
 var io = require('socket.io')(http);
-var mongoose = require('mongoose');
-mongoose.connect('mongodb://127.0.0.1:27017');
+//var mongoose = require('mongoose');
+//mongoose.connect('mongodb://127.0.0.1:27017');
 
-var db = mongoose.connection;
-var BikeSchema = new mongoose.Schema({
-  dir: Number,
-  speed: Number,
-  node: String,
-  time: { type: Date, default: Date.now },
-});
+//var db = mongoose.connection;
+//var BikeSchema = new mongoose.Schema({
+//  dir: Number,
+//  speed: Number,
+//  node: String,
+//  time: { type: Date, default: Date.now },
+//});
 // Create a model based on the schema
-var Bike = mongoose.model('Bike', BikeSchema);
+//var Bike = mongoose.model('Bike', BikeSchema);
 
 app.use(express.static(path.join(__dirname, '/pub')));
 
@@ -36,10 +36,10 @@ app.get('/input', function(req, res){
   console.log(req.header("node"));
   if(req.header("dir")!=undefined&&req.header("speed")!=undefined&&req.header("node")!=undefined) {
     console.log({dir: req.header("dir"), speed: req.header("speed"), node: req.header("node")});
-    Bike.create({dir: req.header("dir"), speed: req.header("speed"), node: req.header("node")}, function(err, bike){
-    if(err) console.log(err);
-    else console.log(bike);
-    });
+    //Bike.create({dir: req.header("dir"), speed: req.header("speed"), node: req.header("node")}, function(err, bike){
+    //if(err) console.log(err);
+    //else console.log(bike);
+    //});
     io.emit('bike', {dir: req.header("dir"), speed: req.header("speed"), node: req.header("node")});
     res.status(202);
     res.send('');
