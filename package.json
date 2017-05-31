@@ -4,6 +4,9 @@
   "description": "",
   "main": "index.js",
   "author": "Elias Basler",
+  "scripts": {
+  "start": "node index.js"
+  },
   "dependencies": {
     "express": "*",
     "mongoose": "*",
