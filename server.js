@@ -3,8 +3,8 @@ var app = express();
 var http = require('http').Server(app);
 var path = require('path');
 var io = require('socket.io')(http);
-//var mongoose = require('mongoose');
-//mongoose.connect('mongodb://127.0.0.1:27017');
+var mongoose = require('mongoose');
+mongoose.connect('http://e.e.basler:LMr5wadtYM@couchdb.cloudno.de:5984/inventeam');
 
 //var db = mongoose.connection;
 //var BikeSchema = new mongoose.Schema({
