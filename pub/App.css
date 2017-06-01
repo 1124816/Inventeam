@@ -1,11 +1,11 @@
 #mapid {
-   height: 80%;
-   width: 60%;
-   position: absolute; left: 2%; top: 19%;
+   height: 64%;
+   width: 48%;
+   position: absolute; left: 2%; top: 17%;
  }
  h1 {
    text-align: center;
-   margin-top: 1%;
+   margin-top: 0%;
  }
 h3 {
   display: inline;
@@ -14,6 +14,24 @@ h3 {
 }
 #nav {
   text-align: center;
-  float: left;
   width: 100%;
+  background-color: powderblue;
+  padding: 1%;
+}
+#table {
+  float: right;
+  margin: 5%;
+  font-size: 2em;
+  border-spacing: .7em;
+}
+td {
+  text-align: center;
+}
+
+#each {
+  float: left;
+  margin: 5%;
+  font-size: 2em;
+  border-spacing: .7em;
+  position: absolute; left: 2%; top: 73%;
 }

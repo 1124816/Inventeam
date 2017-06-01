@@ -4,7 +4,7 @@ var http = require('http').Server(app);
 var path = require('path');
 var io = require('socket.io')(http);
 var mongoose = require('mongoose');
-mongoose.connect('http://e.e.basler:LMr5wadtYM@couchdb.cloudno.de:5984/inventeam');
+mongoose.connect('mongodb://127.0.0.1:27017');
 
 var db = mongoose.connection;
 var BikeSchema = new mongoose.Schema({
@@ -62,6 +62,6 @@ io.on('connection', function(socket){
   });
 });
 
-http.listen(12157, function(){
+http.listen(3000, function(){
   console.log('listening on *:3000');
 });

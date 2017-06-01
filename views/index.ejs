@@ -5,14 +5,26 @@
     <link rel="stylesheet" type="text/css" href="App.css" />
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.3/dist/leaflet.css" />
   </head>
-  <body style="width:100%;padding:0px;margin:0;">
-  <h1 onclick="document.location.href = '/'">Inventeam</h1>
+  <body style='margin:0%;'>
   <div id="nav">
+    <h3 onclick="document.location.href = '/'">Inventeam</h3>
     <h3 onclick="document.location.href = '/about'">About Us</h3>
     <h3 onclick="document.location.href = '/data'">Data</h3>
     <h3 onclick="document.location.href = '/data'">Contact Us</h3>
   </div>
   <div id="mapid"></div>
+  <table id='table'>
+    <tr><td></td><td>Count</td><td>Last Triggered</td></tr>
+    <tr><td>MIT</td><td>23</td><td>5 min ago</td></tr>
+    <tr><td>Downtown</td><td>45</td><td>32 sec ago</td></tr>
+  </table>
+  <table id='each'>
+    <tr><td>Node</td><td>Speed</td><td>Direction</td><td>Time</td></tr>
+    <tr><td>Node</td><td>Speed</td><td>Direction</td><td>Time</td></tr>
+    <tr><td>Node</td><td>Speed</td><td>Direction</td><td>Time</td></tr>
+    <tr><td>Node</td><td>Speed</td><td>Direction</td><td>Time</td></tr>
+    <tr><td>Node</td><td>Speed</td><td>Direction</td><td>Time</td></tr>
+  </table>
   <script src="/socket.io/socket.io.js"></script>
   <script src="https://unpkg.com/leaflet@1.0.3/dist/leaflet.js"></script>
   <script>
