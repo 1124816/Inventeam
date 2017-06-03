@@ -4,19 +4,19 @@
    position: absolute; left: 2%; top: 17%;
  }
  h1 {
-   text-align: center;
-   margin-top: 0%;
- }
+   display: inline;
+   margin-left: 5%;
+   margin-right: 5%;
+}
 h3 {
   display: inline;
-  margin-left: 5%;
-  margin-right: 5%;
+  margin-left: 3%;
+  margin-right: 3%;
 }
 #nav {
-  text-align: center;
-  width: 100%;
+  text-align: left;
   background-color: powderblue;
-  padding: 1%;
+  padding: 1.5%;
 }
 #table {
   float: right;
@@ -31,7 +31,17 @@ td {
 #each {
   float: left;
   margin: 5%;
-  font-size: 2em;
+  font-size: 1.3em;
   border-spacing: .7em;
   position: absolute; left: 2%; top: 73%;
+}
+
+#charts {
+  position: absolute; left: 55%; top: 70%;
+  height: 100%;
+  width: 35%;
+}
+
+body {
+  width: 100%;
 }

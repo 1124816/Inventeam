@@ -2,12 +2,12 @@
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <title>Inventeam</title>
-    <link rel="stylesheet" type="text/css" href="App.css" />
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.3/dist/leaflet.css" />
+    <link rel="stylesheet" type="text/css" href="App.css"/>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.3/dist/leaflet.css"/>
   </head>
   <body style='margin:0%;'>
   <div id="nav">
-    <h3 onclick="document.location.href = '/'">Inventeam</h3>
+    <h1 onclick="document.location.href = '/'">Inventeam</h1>
     <h3 onclick="document.location.href = '/about'">About Us</h3>
     <h3 onclick="document.location.href = '/data'">Data</h3>
     <h3 onclick="document.location.href = '/data'">Contact Us</h3>
@@ -15,8 +15,9 @@
   <div id="mapid"></div>
   <table id='table'>
     <tr><td></td><td>Count</td><td>Last Triggered</td></tr>
-    <tr><td>MIT</td><td>23</td><td>5 min ago</td></tr>
-    <tr><td>Downtown</td><td>45</td><td>32 sec ago</td></tr>
+    <tr><td>Jim</td><td id='jim'>0</td><td>5 min ago</td></tr>
+    <tr><td>Tim</td><td id='tim'>0</td><td>32 sec ago</td></tr>
+    <tr><td>Herb</td><td id='herb'>0</td><td>32 sec ago</td></tr>
   </table>
   <table id='each'>
     <tr><td>Node</td><td>Speed</td><td>Direction</td><td>Time</td></tr>
@@ -24,12 +25,17 @@
     <tr><td>Node</td><td>Speed</td><td>Direction</td><td>Time</td></tr>
     <tr><td>Node</td><td>Speed</td><td>Direction</td><td>Time</td></tr>
     <tr><td>Node</td><td>Speed</td><td>Direction</td><td>Time</td></tr>
+    <tr><td>Node</td><td>Speed</td><td>Direction</td><td>Time</td></tr>
   </table>
+  <div id="charts">
+  <canvas id="chartid" width="600" height="300"></canvas>
+  </div>
   <script src="/socket.io/socket.io.js"></script>
   <script src="https://unpkg.com/leaflet@1.0.3/dist/leaflet.js"></script>
   <script>
   var mymap = L.map('mapid').setView([35.048, -85.31], 14.5);
   var stations = {"bob":[[35.048353, -85.31035], false], "tim":[[35.047002, -85.31031], false], "jim":[[35.050857, -85.310487], false ], "herb":[[35.049579, -85.310404], false]};
+  var length = [];
 
   L.tileLayer('https://api.mapbox.com/styles/v1/mapbox/streets-v10/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWVpczExMjQ4MTYiLCJhIjoiY2owNDM5NGtyMGRobjMybHNjMmhwdWlmeCJ9.k9GrsRyZd771jT0BEumf7g', {
     attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
@@ -61,6 +67,78 @@ for(i in stations) {
     window.setTimeout(function(){stations[msg.node][2].setIcon(nobike)}, 600);
   });
 
+  socket.on('load',function(msg) {
+    console.log("bob");
+
+      length = msg.length;
+      myChart.data.datasets[0].data = length;
+      document.getElementById('jim').innerHTML = length[0]
+      document.getElementById('tim').innerHTML = length[1]
+      document.getElementById('herb').innerHTML = length[2]
+
+      myChart.update();
+      document.getElementById('each').firstChild.nextSibling.firstChild.nextSibling.nextSibling.firstChild.innerHTML = msg.last[0].node;
+      document.getElementById('each').firstChild.nextSibling.firstChild.nextSibling.nextSibling.firstChild.nextSibling.innerHTML = msg.last[0].speed;
+      document.getElementById('each').firstChild.nextSibling.firstChild.nextSibling.nextSibling.firstChild.nextSibling.nextSibling.innerHTML = msg.last[0].dir;
+      document.getElementById('each').firstChild.nextSibling.firstChild.nextSibling.nextSibling.firstChild.nextSibling.nextSibling.nextSibling.innerHTML = msg.last[0].time;
+
+      document.getElementById('each').firstChild.nextSibling.firstChild.nextSibling.nextSibling.nextSibling.nextSibling.firstChild.innerHTML = msg.last[1].node;
+      document.getElementById('each').firstChild.nextSibling.firstChild.nextSibling.nextSibling.nextSibling.nextSibling.firstChild.nextSibling.innerHTML = msg.last[1].speed;
+      document.getElementById('each').firstChild.nextSibling.firstChild.nextSibling.nextSibling.nextSibling.nextSibling.firstChild.nextSibling.nextSibling.innerHTML = msg.last[1].dir;
+      document.getElementById('each').firstChild.nextSibling.firstChild.nextSibling.nextSibling.nextSibling.nextSibling.firstChild.nextSibling.nextSibling.nextSibling.innerHTML = msg.last[1].time;
+
+      document.getElementById('each').firstChild.nextSibling.firstChild.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.firstChild.innerHTML = msg.last[2].node;
+      document.getElementById('each').firstChild.nextSibling.firstChild.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.firstChild.nextSibling.innerHTML = msg.last[2].speed;
+      document.getElementById('each').firstChild.nextSibling.firstChild.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.firstChild.nextSibling.nextSibling.innerHTML = msg.last[2].dir;
+      document.getElementById('each').firstChild.nextSibling.firstChild.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.firstChild.nextSibling.nextSibling.nextSibling.innerHTML = msg.last[2].time;
+
+      document.getElementById('each').firstChild.nextSibling.firstChild.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.firstChild.innerHTML = msg.last[3].node;
+      document.getElementById('each').firstChild.nextSibling.firstChild.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.firstChild.nextSibling.innerHTML = msg.last[3].speed;
+      document.getElementById('each').firstChild.nextSibling.firstChild.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.firstChild.nextSibling.nextSibling.innerHTML = msg.last[3].dir;
+      document.getElementById('each').firstChild.nextSibling.firstChild.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.firstChild.nextSibling.nextSibling.nextSibling.innerHTML = msg.last[3].time;
+
+      document.getElementById('each').firstChild.nextSibling.firstChild.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.firstChild.innerHTML = msg.last[4].node;
+      document.getElementById('each').firstChild.nextSibling.firstChild.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.firstChild.nextSibling.innerHTML = msg.last[4].speed;
+      document.getElementById('each').firstChild.nextSibling.firstChild.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.firstChild.nextSibling.nextSibling.innerHTML = msg.last[4].dir;
+      document.getElementById('each').firstChild.nextSibling.firstChild.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.firstChild.nextSibling.nextSibling.nextSibling.innerHTML = msg.last[4].time;
+
+  });
+
   </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.js"></script>
+  <script>
+  var ctx = document.getElementById("chartid").getContext('2d');
+  var myChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+        labels: ["Jim", "Tim", "Herb"],
+        datasets: [{
+            label: '# of Bicyclists',
+            data: [0, 0, 0],
+            backgroundColor: [
+                'rgba(255, 99, 132, 0.6)',
+                'rgba(54, 162, 235, 0.6)',
+                'rgba(255, 206, 86, 0.6)'
+            ],
+            borderColor: [
+                'rgba(255,99,132,1)',
+                'rgba(54, 162, 235, 1)',
+                'rgba(255, 206, 86, 1)'
+            ],
+            borderWidth: 1
+        }]
+    },
+    options: {
+        responsive: false,
+        scales: {
+            yAxes: [{
+                ticks: {
+                    beginAtZero:true
+                }
+            }]
+        }
+    }
+  });
+</script>
   </body>
 </html>
