@@ -52,26 +52,26 @@ app.get('/input', function(req, res){
 io.on('connection', function(socket){
   console.log('a user connected');
   var length = [];
-  Bike.find({node:'jim'}, function (err, bikes) {
-  if (err) return console.error(err);
-  length[0] = bikes.length;
-  })
+  //Bike.find({node:'jim'}, function (err, bikes) {
+  //if (err) return console.error(err);
+  //length[0] = bikes.length;
+  //})
 
-  Bike.find({node:'tim'}, function (err, bikes) {
-  if (err) return console.error(err);
-  length[1] = bikes.length;
-  })
+  //Bike.find({node:'tim'}, function (err, bikes) {
+  //if (err) return console.error(err);
+  //length[1] = bikes.length;
+  //})
 
-  Bike.find({node:'herb'}, function (err, bikes) {
-  if (err) return console.error(err);
-  length[2] = bikes.length;
-  })
+  //Bike.find({node:'herb'}, function (err, bikes) {
+  //if (err) return console.error(err);
+  //length[2] = bikes.length;
+  //})
 
-  Bike.find(function (err, bikes) {
-  if (err) return console.error(err);
-  socket.emit('load', {last: bikes.slice(bikes.length-5), length:length});
-  console.log(bikes.slice(bikes.length-5));
-  })
+  //Bike.find(function (err, bikes) {
+  //if (err) return console.error(err);
+  //socket.emit('load', {last: bikes.slice(bikes.length-5), length:length});
+  //console.log(bikes.slice(bikes.length-5));
+  //})
   //socket.on('time', function(msg){
   //console.log(msg);
   //
