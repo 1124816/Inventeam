@@ -4,11 +4,11 @@ var http = require('http').Server(app);
 var path = require('path');
 var io = require('socket.io')(http);
 var mongo = require('mongojs');
-var mongoose = require('mongoose');
+//var mongoose = require('mongoose');
 //mongoose.connect('mongodb://e.e.basler:LMr5wadtYM@mongodb.cloudno.de:27017');
-var databaseUrl = "mymongodb://e.e.basler:LMr5wadtYM@mongodb.cloudno.de:27017db";
+var databaseUrl = "mymongodb://username:password@mongodb.cloudno.de:27017db";
 var collections = ["bikes"]
-var db = mongo.connect(databaseUrl, collections);
+var db = mongo(databaseUrl, collections);
 
 //var db = mongoose.connection;
 //var BikeSchema = new mongoose.Schema({
