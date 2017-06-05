@@ -6,7 +6,7 @@ var io = require('socket.io')(http);
 var mongo = require('mongojs');
 //var mongoose = require('mongoose');
 //mongoose.connect('mongodb://e.e.basler:LMr5wadtYM@mongodb.cloudno.de:27017');
-var databaseUrl = "mymongodb://username:password@mongodb.cloudno.de:27017db";
+var databaseUrl = "mymongodb://"+process.env.DBUSER+":"+process.env.DBPWD+"@mongodb.cloudno.de:27017db";
 var collections = ["bikes"]
 var db = mongo(databaseUrl, collections);
 
@@ -17,7 +17,6 @@ var db = mongo(databaseUrl, collections);
 //  node: String,
 //  time: { type: Date, default: Date.now },
 //});
-db.auth(process.env.DBUSER, process.env.DBPWD)
 
 // Create a model based on the schema
 //var Bike = mongoose.model('Bike', BikeSchema);
