@@ -3,7 +3,7 @@ var app = express();
 var http = require('http').Server(app);
 var path = require('path');
 var io = require('socket.io')(http);
-var mongo = require('mongod');
+var mongo = require('mongojs');
 var mongoose = require('mongoose');
 //mongoose.connect('mongodb://e.e.basler:LMr5wadtYM@mongodb.cloudno.de:27017');
 var databaseUrl = "mymongodb://e.e.basler:LMr5wadtYM@mongodb.cloudno.de:27017db";
