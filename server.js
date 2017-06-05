@@ -22,6 +22,7 @@ var db = mongo(databaseUrl, collections);
 //var Bike = mongoose.model('Bike', BikeSchema);
 
 app.use(express.static(path.join(__dirname, '/pub')));
+app.disable('etag');
 app.get('/', function(req, res){
   res.render('index.ejs', {});
 });
