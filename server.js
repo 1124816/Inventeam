@@ -14,7 +14,7 @@ if(process.env.LOGNAME==='meis1124816') {
     mongoose.connect('mongodb://localhost/test');
 } else {
     var port = 12174;
-    mongoose.connect('mongodb://"+process.env.DBUSER+":"+process.env.DBPWD+"@mongodb.cloudno.de:27017/bikes');
+    mongoose.connect('mongodb://'+process.env.DBUSER+':'+process.env.DBPWD+'@mongodb.cloudno.de:27017/bikes');
     //var databaseUrl = "mongodb://"+process.env.DBUSER+":"+process.env.DBPWD+"@mongodb.cloudno.de:27017/bikes";
 };
 //var collections = ["bike"]

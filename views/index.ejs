@@ -83,13 +83,13 @@
     timeouts[0][0] = window.setInterval(function(){
     document.getElementById('jimtime').innerHTML = Math.round((Date.now() - timeouts[0][1])/60000) + ' minutes ago';
     console.log("update");
-    }, 10000);
+    }, 1000);
     timeouts[1][0] = window.setInterval(function(){
     document.getElementById('timtime').innerHTML =  Math.round((Date.now() - timeouts[1][1])/60000) + ' minutes ago';
-    }, 10000);
+    }, 1000);
     timeouts[2][0] = window.setInterval(function(){
     document.getElementById('herbtime').innerHTML = Math.round((Date.now() - timeouts[2][1])/60000) + ' minutes ago';
-    }, 10000);
+    }, 1000);
 
     myChart.update();
     document.getElementById('each').firstChild.nextSibling.firstChild.nextSibling.nextSibling.firstChild.innerHTML = msg.last[4].node;
