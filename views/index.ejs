@@ -15,9 +15,9 @@
   <div id="mapid"></div>
   <table id='table'>
     <tr><td></td><td>Count</td><td>Last Triggered</td></tr>
-    <tr><td>Jim</td><td id='jim'>0</td><td>5 min ago</td></tr>
-    <tr><td>Tim</td><td id='tim'>0</td><td>32 sec ago</td></tr>
-    <tr><td>Herb</td><td id='herb'>0</td><td>32 sec ago</td></tr>
+    <tr><td>Jim</td><td id='jim'>0</td><td id='jimtime'>5 min ago</td></tr>
+    <tr><td>Tim</td><td id='tim'>0</td><td id='timtime'>32 sec ago</td></tr>
+    <tr><td>Herb</td><td id='herb'>0</td><td id='herbtime'>32 sec ago</td></tr>
   </table>
   <table id='each'>
     <tr><td>Node</td><td>Speed</td><td>Direction</td><td>Time</td></tr>
@@ -33,6 +33,7 @@
   <script src="/socket.io/socket.io.js"></script>
   <script src="https://unpkg.com/leaflet@1.0.3/dist/leaflet.js"></script>
   <script>
+  //map setup
   var mymap = L.map('mapid').setView([35.048, -85.31], 14.5);
   var stations = {"bob":[[35.048353, -85.31035], false], "tim":[[35.047002, -85.31031], false], "jim":[[35.050857, -85.310487], false ], "herb":[[35.049579, -85.310404], false]};
   var length = [];
@@ -42,22 +43,80 @@
     maxZoom: 18,
     id: 'your.mapbox.project.id',
     accessToken: 'your.mapbox.public.access.token'
-}).addTo(mymap);
-var nobike = L.icon({
+  }).addTo(mymap);
+  var nobike = L.icon({
     iconUrl: 'nobike.png',
     iconSize: [30, 60],
     popupAnchor: [0, -25]
-});
-var bike = L.icon({
+  });
+  var bike = L.icon({
     iconUrl: 'bike.png',
     iconSize: [30, 60],
     popupAnchor: [0, -25]
-});
+  });
 
-for(i in stations) {
-  stations[i].push(L.marker([stations[i][0][0], stations[i][0][1]], {"riseOnHover":true, "icon": nobike}).addTo(mymap));
-  stations[i].push(stations[i][2].bindPopup('Lots O\' bikes', {"autoClose": false}));
-};
+  for(i in stations) {
+    stations[i].push(L.marker([stations[i][0][0], stations[i][0][1]], {"riseOnHover":true, "icon": nobike}).addTo(mymap));
+    stations[i].push(stations[i][2].bindPopup('Lots O\' bikes', {"autoClose": false}));
+  };
+
+  //socket.io
+  var timeouts = [[],[],[]];
+
+  function updateCount(msg) {
+    window.clearTimeout(timeouts[0][0]);
+    window.clearTimeout(timeouts[1][0]);
+    window.clearTimeout(timeouts[2][0]);
+    timeouts = [[],[],[]];
+    length = msg.length;
+    myChart.data.datasets[0].data = length;
+    document.getElementById('jim').innerHTML = length[0]
+    document.getElementById('tim').innerHTML = length[1]
+    document.getElementById('herb').innerHTML = length[2]
+    document.getElementById('jimtime').innerHTML = Math.round((Date.now() - Date.parse(msg.lasttime[0]))/60000) + ' minutes ago'
+    timeouts[0][1] = Date.parse(msg.lasttime[0]);
+    document.getElementById('timtime').innerHTML = Math.round((Date.now() - Date.parse(msg.lasttime[1]))/60000) + ' minutes ago'
+    timeouts[1][1] = Date.parse(msg.lasttime[1]);
+    document.getElementById('herbtime').innerHTML = Math.round((Date.now() - Date.parse(msg.lasttime[2]))/60000) + ' minutes ago'
+    timeouts[2][1] = Date.parse(msg.lasttime[2]);
+
+    timeouts[0][0] = window.setInterval(function(){
+    document.getElementById('jimtime').innerHTML = Math.round((Date.now() - timeouts[0][1])/60000) + ' minutes ago';
+    console.log("update");
+    }, 10000);
+    timeouts[1][0] = window.setInterval(function(){
+    document.getElementById('timtime').innerHTML =  Math.round((Date.now() - timeouts[1][1])/60000) + ' minutes ago';
+    }, 10000);
+    timeouts[2][0] = window.setInterval(function(){
+    document.getElementById('herbtime').innerHTML = Math.round((Date.now() - timeouts[2][1])/60000) + ' minutes ago';
+    }, 10000);
+
+    myChart.update();
+    document.getElementById('each').firstChild.nextSibling.firstChild.nextSibling.nextSibling.firstChild.innerHTML = msg.last[4].node;
+    document.getElementById('each').firstChild.nextSibling.firstChild.nextSibling.nextSibling.firstChild.nextSibling.innerHTML = msg.last[4].speed;
+    document.getElementById('each').firstChild.nextSibling.firstChild.nextSibling.nextSibling.firstChild.nextSibling.nextSibling.innerHTML = msg.last[4].dir;
+    document.getElementById('each').firstChild.nextSibling.firstChild.nextSibling.nextSibling.firstChild.nextSibling.nextSibling.nextSibling.innerHTML = msg.last[4].time;
+
+    document.getElementById('each').firstChild.nextSibling.firstChild.nextSibling.nextSibling.nextSibling.nextSibling.firstChild.innerHTML = msg.last[3].node;
+    document.getElementById('each').firstChild.nextSibling.firstChild.nextSibling.nextSibling.nextSibling.nextSibling.firstChild.nextSibling.innerHTML = msg.last[3].speed;
+    document.getElementById('each').firstChild.nextSibling.firstChild.nextSibling.nextSibling.nextSibling.nextSibling.firstChild.nextSibling.nextSibling.innerHTML = msg.last[3].dir;
+    document.getElementById('each').firstChild.nextSibling.firstChild.nextSibling.nextSibling.nextSibling.nextSibling.firstChild.nextSibling.nextSibling.nextSibling.innerHTML = msg.last[3].time;
+
+    document.getElementById('each').firstChild.nextSibling.firstChild.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.firstChild.innerHTML = msg.last[2].node;
+    document.getElementById('each').firstChild.nextSibling.firstChild.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.firstChild.nextSibling.innerHTML = msg.last[2].speed;
+    document.getElementById('each').firstChild.nextSibling.firstChild.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.firstChild.nextSibling.nextSibling.innerHTML = msg.last[2].dir;
+    document.getElementById('each').firstChild.nextSibling.firstChild.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.firstChild.nextSibling.nextSibling.nextSibling.innerHTML = msg.last[2].time;
+
+    document.getElementById('each').firstChild.nextSibling.firstChild.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.firstChild.innerHTML = msg.last[1].node;
+    document.getElementById('each').firstChild.nextSibling.firstChild.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.firstChild.nextSibling.innerHTML = msg.last[1].speed;
+    document.getElementById('each').firstChild.nextSibling.firstChild.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.firstChild.nextSibling.nextSibling.innerHTML = msg.last[1].dir;
+    document.getElementById('each').firstChild.nextSibling.firstChild.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.firstChild.nextSibling.nextSibling.nextSibling.innerHTML = msg.last[1].time;
+
+    document.getElementById('each').firstChild.nextSibling.firstChild.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.firstChild.innerHTML = msg.last[0].node;
+    document.getElementById('each').firstChild.nextSibling.firstChild.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.firstChild.nextSibling.innerHTML = msg.last[0].speed;
+    document.getElementById('each').firstChild.nextSibling.firstChild.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.firstChild.nextSibling.nextSibling.innerHTML = msg.last[0].dir;
+    document.getElementById('each').firstChild.nextSibling.firstChild.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.firstChild.nextSibling.nextSibling.nextSibling.innerHTML = msg.last[0].time;
+  };
 
   var socket = io();
 
@@ -65,43 +124,12 @@ for(i in stations) {
     console.log("bob");
     stations[msg.node][3].setIcon(bike)
     window.setTimeout(function(){stations[msg.node][2].setIcon(nobike)}, 600);
+    updateCount(msg)
   });
 
   socket.on('load',function(msg) {
     console.log("bob");
-
-      length = msg.length;
-      myChart.data.datasets[0].data = length;
-      document.getElementById('jim').innerHTML = length[0]
-      document.getElementById('tim').innerHTML = length[1]
-      document.getElementById('herb').innerHTML = length[2]
-
-      myChart.update();
-      document.getElementById('each').firstChild.nextSibling.firstChild.nextSibling.nextSibling.firstChild.innerHTML = msg.last[0].node;
-      document.getElementById('each').firstChild.nextSibling.firstChild.nextSibling.nextSibling.firstChild.nextSibling.innerHTML = msg.last[0].speed;
-      document.getElementById('each').firstChild.nextSibling.firstChild.nextSibling.nextSibling.firstChild.nextSibling.nextSibling.innerHTML = msg.last[0].dir;
-      document.getElementById('each').firstChild.nextSibling.firstChild.nextSibling.nextSibling.firstChild.nextSibling.nextSibling.nextSibling.innerHTML = msg.last[0].time;
-
-      document.getElementById('each').firstChild.nextSibling.firstChild.nextSibling.nextSibling.nextSibling.nextSibling.firstChild.innerHTML = msg.last[1].node;
-      document.getElementById('each').firstChild.nextSibling.firstChild.nextSibling.nextSibling.nextSibling.nextSibling.firstChild.nextSibling.innerHTML = msg.last[1].speed;
-      document.getElementById('each').firstChild.nextSibling.firstChild.nextSibling.nextSibling.nextSibling.nextSibling.firstChild.nextSibling.nextSibling.innerHTML = msg.last[1].dir;
-      document.getElementById('each').firstChild.nextSibling.firstChild.nextSibling.nextSibling.nextSibling.nextSibling.firstChild.nextSibling.nextSibling.nextSibling.innerHTML = msg.last[1].time;
-
-      document.getElementById('each').firstChild.nextSibling.firstChild.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.firstChild.innerHTML = msg.last[2].node;
-      document.getElementById('each').firstChild.nextSibling.firstChild.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.firstChild.nextSibling.innerHTML = msg.last[2].speed;
-      document.getElementById('each').firstChild.nextSibling.firstChild.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.firstChild.nextSibling.nextSibling.innerHTML = msg.last[2].dir;
-      document.getElementById('each').firstChild.nextSibling.firstChild.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.firstChild.nextSibling.nextSibling.nextSibling.innerHTML = msg.last[2].time;
-
-      document.getElementById('each').firstChild.nextSibling.firstChild.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.firstChild.innerHTML = msg.last[3].node;
-      document.getElementById('each').firstChild.nextSibling.firstChild.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.firstChild.nextSibling.innerHTML = msg.last[3].speed;
-      document.getElementById('each').firstChild.nextSibling.firstChild.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.firstChild.nextSibling.nextSibling.innerHTML = msg.last[3].dir;
-      document.getElementById('each').firstChild.nextSibling.firstChild.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.firstChild.nextSibling.nextSibling.nextSibling.innerHTML = msg.last[3].time;
-
-      document.getElementById('each').firstChild.nextSibling.firstChild.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.firstChild.innerHTML = msg.last[4].node;
-      document.getElementById('each').firstChild.nextSibling.firstChild.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.firstChild.nextSibling.innerHTML = msg.last[4].speed;
-      document.getElementById('each').firstChild.nextSibling.firstChild.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.firstChild.nextSibling.nextSibling.innerHTML = msg.last[4].dir;
-      document.getElementById('each').firstChild.nextSibling.firstChild.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.firstChild.nextSibling.nextSibling.nextSibling.innerHTML = msg.last[4].time;
-
+    updateCount(msg)
   });
 
   </script>

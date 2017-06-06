@@ -3,26 +3,38 @@ var app = express();
 var http = require('http').Server(app);
 var path = require('path');
 var io = require('socket.io')(http);
-var mongo = require('mongojs');
-//var mongoose = require('mongoose');
-//mongoose.connect('mongodb://e.e.basler:LMr5wadtYM@mongodb.cloudno.de:27017');
-var databaseUrl = "mongodb://"+process.env.DBUSER+":"+process.env.DBPWD+"@mongodb.cloudno.de:27017/bikes";
-var collections = ["bikes"]
-var db = mongo(databaseUrl, collections);
+//var mongo = require('mongojs');
+var mongoose = require('mongoose');
 
-//var db = mongoose.connection;
-//var BikeSchema = new mongoose.Schema({
-//  dir: Number,
-//  speed: Number,
-//  node: String,
-//  time: { type: Date, default: Date.now },
-//});
 
+//Database setup
+if(process.env.LOGNAME==='meis1124816') {
+    var port = 3000;
+    //var databaseUrl = "local";
+    mongoose.connect('mongodb://localhost/test');
+} else {
+    var port = 12174;
+    mongoose.connect('mongodb://"+process.env.DBUSER+":"+process.env.DBPWD+"@mongodb.cloudno.de:27017/bikes');
+    //var databaseUrl = "mongodb://"+process.env.DBUSER+":"+process.env.DBPWD+"@mongodb.cloudno.de:27017/bikes";
+};
+//var collections = ["bike"]
+//var db = mongo(databaseUrl, collections);
+//console.log(db);
+
+var db = mongoose.connection;
+var BikeSchema = new mongoose.Schema({
+  dir: Number,
+  speed: Number,
+  node: String,
+  time: { type: Date, default: Date.now },
+});
 // Create a model based on the schema
-//var Bike = mongoose.model('Bike', BikeSchema);
+var Bike = mongoose.model('Bike', BikeSchema);
 
+//express setup
 app.use(express.static(path.join(__dirname, '/pub')));
-app.disable('etag');
+
+//routes
 app.get('/', function(req, res){
   res.render('index.ejs', {});
 });
@@ -35,17 +47,22 @@ app.get('/data', function(req, res){
   res.render('data.ejs', {});
 });
 
+//api input
 app.get('/input', function(req, res){
   console.log(req.header("dir"));
   console.log(req.header("speed"));
   console.log(req.header("node"));
   if(req.header("dir")!=undefined&&req.header("speed")!=undefined&&req.header("node")!=undefined) {
     console.log({dir: req.header("dir"), speed: req.header("speed"), node: req.header("node")});
-    db.bikes.save({dir: req.header("dir"), speed: req.header("speed"), node: req.header("node"), time: Date.now}, function(err, saved) {
+    Bike.create({dir: req.header("dir"), speed: req.header("speed"), node: req.header("node")}, function(err, saved) {
     if( err || !saved ) console.log("bike not saved");
     else console.log("bike saved");
     });
-    io.emit('bike', {dir: req.header("dir"), speed: req.header("speed"), node: req.header("node")});
+    Bike.find(function (err, bike) {
+    if (err) return console.error(err);
+      //console.log(bikeCount());
+      bikeCount(function(length, lasttime) {io.emit('bike', {dir: req.header("dir"), speed: req.header("speed"), node: req.header("node"), last: bike.slice(bike.length-5), length:length, lasttime: lasttime})});
+    })
     res.status(202);
     res.send('');
   }else {
@@ -54,39 +71,41 @@ app.get('/input', function(req, res){
   };
 });
 
-io.on('connection', function(socket){
-  console.log('a user connected');
+function bikeCount(fun) {
   var length = [];
-  db.bikes.find({node:'jim'}, function (err, bikes) {
+  var lasttime = [];
+  Bike.find({node:'jim'}, function (err, bike) {
   if (err) return console.error(err);
-  length[0] = bikes.length;
-  })
-
-  db.bikes.find({node:'tim'}, function (err, bikes) {
+  length[0] = bike.length;
+  lasttime[0] = bike[bike.length-1].time;
+  Bike.find({node:'tim'}, function (err, bike) {
   if (err) return console.error(err);
-  length[1] = bikes.length;
-  })
-
-  db.bikes.find({node:'herb'}, function (err, bikes) {
+  length[1] = bike.length;
+  lasttime[1] = bike[bike.length-1].time;
+  Bike.find({node:'herb'}, function (err, bike) {
   if (err) return console.error(err);
-  length[2] = bikes.length;
-  })
-
-  db.bikes.find(function (err, bikes) {
-  if (err) return console.error(err);
-  socket.emit('load', {last: bikes.slice(bikes.length-5), length:length});
-  console.log(bikes.slice(bikes.length-5));
-  })
-  socket.on('time', function(msg){
-  console.log(msg);
-
-  socket.broadcast.emit('upstart', base);
+  length[2]= bike.length;
+  lasttime[2] = bike[bike.length-1].time;
+  fun(length, lasttime);
   });
+  });
+  });
+};
+
+io.on('connection', function(socket){
+  //on connect
+  console.log('a user connected');
+  Bike.find(function (err, bike) {
+  if (err) return console.error(err);
+  bikeCount(function(length, lasttime) {socket.emit('load', {last: bike.slice(bike.length-5), length:length, lasttime: lasttime})});
+  console.log(bike.slice(bike.length-5));
+  })
+
   socket.on('disconnect', function(){
   console.log('user disconnected');
   });
 });
 
-http.listen(12174, function(){
-  console.log('listening on *:3000');
+http.listen(port, function(){
+  console.log('listening on *:' + port);
 });

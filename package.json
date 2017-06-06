@@ -12,6 +12,7 @@
     "ejs": "^2.5.6",
     "express": "*",
     "mongojs": "*",
-    "socketio": "*"
+    "socketio": "*",
+    "async": "*"
   }
 }
