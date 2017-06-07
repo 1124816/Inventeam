@@ -3,16 +3,11 @@
    width: 48%;
    position: absolute; left: 2%; top: 17%;
  }
- h1 {
+ #navh {
    display: inline;
    margin-left: 5%;
    margin-right: 5%;
-}
-h3 {
-  display: inline;
-  margin-left: 3%;
-  margin-right: 3%;
-}
+ }
 #nav {
   text-align: left;
   background-color: powderblue;

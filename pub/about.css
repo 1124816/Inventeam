@@ -1,19 +1,14 @@
 #content {
   text-align: center;
-  margin: 6%;
+  margin: 2%;
 }
- h1 {
-   text-align: center;
-   margin-top: 0%;
+ #navh {
+   display: inline;
+   margin-left: 5%;
+   margin-right: 5%;
  }
-h3 {
-  display: inline;
-  margin-left: 5%;
-  margin-right: 5%;
-}
 #nav {
-  text-align: center;
-  width: 100%;
+  text-align: left;
   background-color: powderblue;
-  padding: 1%;
+  padding: 1.5%;
 }

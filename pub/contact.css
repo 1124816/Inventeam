@@ -2,11 +2,7 @@
   text-align: center;
   margin: 6%;
 }
- h1 {
-   text-align: center;
-   margin-top: 0%;
- }
-h3 {
+#navh {
   display: inline;
   margin-left: 5%;
   margin-right: 5%;
