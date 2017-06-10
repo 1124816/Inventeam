@@ -5,7 +5,7 @@ var path = require('path');
 var io = require('socket.io')(http);
 //var mongo = require('mongojs');
 var mongoose = require('mongoose');
-
+var nodes = {"40003b000e51353532343635":"jim"};
 
 //Database setup
 if(process.env.LOGNAME==='meis1124816') {
@@ -52,16 +52,16 @@ app.get('/input', function(req, res){
   console.log(req.header("dir"));
   console.log(req.header("speed"));
   console.log(req.header("node"));
-  if(req.header("dir")!=undefined&&req.header("speed")!=undefined&&req.header("node")!=undefined) {
-    console.log({dir: req.header("dir"), speed: req.header("speed"), node: req.header("node")});
-    Bike.create({dir: req.header("dir"), speed: req.header("speed"), node: req.header("node")}, function(err, saved) {
+  if(req.header("dir")!=undefined&&req.header("speed")!=undefined&&nodes[req.header("node")]!=undefined) {
+    console.log({dir: req.header("dir"), speed: req.header("speed"), node: nodes[req.header("node")]});
+    Bike.create({dir: req.header("dir"), speed: req.header("speed"), node: nodes[req.header("node")]}, function(err, saved) {
     if( err || !saved ) console.log("bike not saved");
     else console.log("bike saved");
     });
     Bike.find(function (err, bike) {
     if (err) return console.error(err);
       //console.log(bikeCount());
-      bikeCount(function(length, lasttime) {io.emit('bike', {dir: req.header("dir"), speed: req.header("speed"), node: req.header("node"), last: bike.slice(bike.length-5), length:length, lasttime: lasttime})});
+      bikeCount(function(length, lasttime) {io.emit('bike', {dir: req.header("dir"), speed: req.header("speed"), node: nodes[req.header("node")], last: bike.slice(bike.length-5), length:length, lasttime: lasttime})});
     })
     res.status(202);
     res.send('');
