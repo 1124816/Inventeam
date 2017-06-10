@@ -74,7 +74,7 @@ app.get('/input', function(req, res){
 function bikeCount(fun) {
   var length = [];
   var lasttime = [];
-  Bike.find({node:'jim'}, function (err, bike) {
+  Bike.find({node:'40003b000e51353532343635'}, function (err, bike) {
   if (err) return console.error(err);
   length[0] = bike.length;
   lasttime[0] = bike[bike.length-1].time;

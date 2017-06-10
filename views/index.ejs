@@ -33,6 +33,7 @@
   <script src="/socket.io/socket.io.js"></script>
   <script src="https://unpkg.com/leaflet@1.0.3/dist/leaflet.js"></script>
   <script>
+  var nodes = {"40003b000e51353532343635":"jim"};
   //map setup
   var mymap = L.map('mapid').setView([35.048, -85.31], 14.5);
   var stations = {"bob":[[35.048353, -85.31035], false], "tim":[[35.047002, -85.31031], false], "jim":[[35.050857, -85.310487], false ], "herb":[[35.049579, -85.310404], false]};
@@ -64,28 +65,29 @@
   var timeouts = [[],[],[]];
 
   function func(unix_time) {
-	if(((Date.now() - unix_time)/60000)<1) {
-		if(((Date.now() - unix_time)/1000)<2) {
-      return Math.round((Date.now() - unix_time)/1000) + ' Heckond Ago'
+	if(Math.round(((Date.now() - unix_time)/60000))<1) {
+		if(Math.round(((Date.now() - unix_time)/1000))<2) {
+      return Math.round((Date.now() - unix_time)/1000) + ' Second Ago'
     } else {
-      return Math.round((Date.now() - unix_time)/1000) + ' Heckonds Ago'
+      return Math.round((Date.now() - unix_time)/1000) + ' Seconds Ago'
     }
-	} else if(((Date.now() - unix_time)/3600000)>1){
-    if(((Date.now() - unix_time)/C)<2) {
+	} else if(Math.round(((Date.now() - unix_time)/3600000))>1){
+    if(Math.round(((Date.now() - unix_time)/3600000))<2) {
       return Math.round((Date.now() - unix_time)/3600000) + ' Hour Ago'
     } else {
       return Math.round((Date.now() - unix_time)/3600000) + ' Hours Ago'
     }
 	} else {
-    if(((Date.now() - unix_time)/60000)<2) {
+    if(Math.round(((Date.now() - unix_time)/60000))<2) {
       return Math.round((Date.now() - unix_time)/60000) + ' Minute Ago'
     } else {
-      return Math.round((Date.now() - unix_time)/1000) + ' Minutes Ago'
+      return Math.round((Date.now() - unix_time)/60000) + ' Minutes Ago'
     }
 	};
   };
 
   function updateCount(msg) {
+    console.log(msg);
     window.clearTimeout(timeouts[0][0]);
     window.clearTimeout(timeouts[1][0]);
     window.clearTimeout(timeouts[2][0]);
@@ -115,27 +117,27 @@
     }, 1000);
 
     myChart.update();
-    document.getElementById('each').firstChild.nextSibling.firstChild.nextSibling.nextSibling.firstChild.innerHTML = msg.last[4].node;
+    document.getElementById('each').firstChild.nextSibling.firstChild.nextSibling.nextSibling.firstChild.innerHTML = nodes[msg.last[4].node];
     document.getElementById('each').firstChild.nextSibling.firstChild.nextSibling.nextSibling.firstChild.nextSibling.innerHTML = msg.last[4].speed;
     document.getElementById('each').firstChild.nextSibling.firstChild.nextSibling.nextSibling.firstChild.nextSibling.nextSibling.innerHTML = msg.last[4].dir;
     document.getElementById('each').firstChild.nextSibling.firstChild.nextSibling.nextSibling.firstChild.nextSibling.nextSibling.nextSibling.innerHTML = msg.last[4].time;
 
-    document.getElementById('each').firstChild.nextSibling.firstChild.nextSibling.nextSibling.nextSibling.nextSibling.firstChild.innerHTML = msg.last[3].node;
+    document.getElementById('each').firstChild.nextSibling.firstChild.nextSibling.nextSibling.nextSibling.nextSibling.firstChild.innerHTML = nodes[msg.last[3].node];
     document.getElementById('each').firstChild.nextSibling.firstChild.nextSibling.nextSibling.nextSibling.nextSibling.firstChild.nextSibling.innerHTML = msg.last[3].speed;
     document.getElementById('each').firstChild.nextSibling.firstChild.nextSibling.nextSibling.nextSibling.nextSibling.firstChild.nextSibling.nextSibling.innerHTML = msg.last[3].dir;
     document.getElementById('each').firstChild.nextSibling.firstChild.nextSibling.nextSibling.nextSibling.nextSibling.firstChild.nextSibling.nextSibling.nextSibling.innerHTML = msg.last[3].time;
 
-    document.getElementById('each').firstChild.nextSibling.firstChild.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.firstChild.innerHTML = msg.last[2].node;
+    document.getElementById('each').firstChild.nextSibling.firstChild.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.firstChild.innerHTML = nodes[msg.last[2].node];
     document.getElementById('each').firstChild.nextSibling.firstChild.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.firstChild.nextSibling.innerHTML = msg.last[2].speed;
     document.getElementById('each').firstChild.nextSibling.firstChild.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.firstChild.nextSibling.nextSibling.innerHTML = msg.last[2].dir;
     document.getElementById('each').firstChild.nextSibling.firstChild.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.firstChild.nextSibling.nextSibling.nextSibling.innerHTML = msg.last[2].time;
 
-    document.getElementById('each').firstChild.nextSibling.firstChild.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.firstChild.innerHTML = msg.last[1].node;
+    document.getElementById('each').firstChild.nextSibling.firstChild.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.firstChild.innerHTML = nodes[msg.last[1].node];
     document.getElementById('each').firstChild.nextSibling.firstChild.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.firstChild.nextSibling.innerHTML = msg.last[1].speed;
     document.getElementById('each').firstChild.nextSibling.firstChild.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.firstChild.nextSibling.nextSibling.innerHTML = msg.last[1].dir;
     document.getElementById('each').firstChild.nextSibling.firstChild.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.firstChild.nextSibling.nextSibling.nextSibling.innerHTML = msg.last[1].time;
 
-    document.getElementById('each').firstChild.nextSibling.firstChild.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.firstChild.innerHTML = msg.last[0].node;
+    document.getElementById('each').firstChild.nextSibling.firstChild.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.firstChild.innerHTML = nodes[msg.last[0].node];
     document.getElementById('each').firstChild.nextSibling.firstChild.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.firstChild.nextSibling.innerHTML = msg.last[0].speed;
     document.getElementById('each').firstChild.nextSibling.firstChild.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.firstChild.nextSibling.nextSibling.innerHTML = msg.last[0].dir;
     document.getElementById('each').firstChild.nextSibling.firstChild.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.firstChild.nextSibling.nextSibling.nextSibling.innerHTML = msg.last[0].time;
@@ -144,14 +146,13 @@
   var socket = io();
 
   socket.on('bike',function(msg) {
-    console.log("bob");
+    msg.node = nodes[msg.node];
     stations[msg.node][3].setIcon(bike)
     window.setTimeout(function(){stations[msg.node][2].setIcon(nobike)}, 600);
     updateCount(msg)
   });
 
   socket.on('load',function(msg) {
-    console.log("bob");
     updateCount(msg)
   });
 
