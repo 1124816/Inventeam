@@ -65,11 +65,23 @@
 
   function func(unix_time) {
 	if(((Date.now() - unix_time)/60000)<1) {
-		return Math.round((Date.now() - unix_time)/1000) + ' seconds ago'
+		if(((Date.now() - unix_time)/1000)<2) {
+      return Math.round((Date.now() - unix_time)/1000) + ' Heckond Ago'
+    } else {
+      return Math.round((Date.now() - unix_time)/1000) + ' Heckonds Ago'
+    }
 	} else if(((Date.now() - unix_time)/3600000)>1){
-		return Math.round((Date.now() - unix_time)/3600000) + ' hours ago'
-	} else{
-		return Math.round((Date.now() - unix_time)/60000) + ' minutes ago'
+    if(((Date.now() - unix_time)/C)<2) {
+      return Math.round((Date.now() - unix_time)/3600000) + ' Hour Ago'
+    } else {
+      return Math.round((Date.now() - unix_time)/3600000) + ' Hours Ago'
+    }
+	} else {
+    if(((Date.now() - unix_time)/60000)<2) {
+      return Math.round((Date.now() - unix_time)/60000) + ' Minute Ago'
+    } else {
+      return Math.round((Date.now() - unix_time)/1000) + ' Minutes Ago'
+    }
 	};
   };
 
