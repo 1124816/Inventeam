@@ -120,27 +120,27 @@
     document.getElementById('each').firstChild.nextSibling.firstChild.nextSibling.nextSibling.firstChild.innerHTML = nodes[msg.last[4].node];
     document.getElementById('each').firstChild.nextSibling.firstChild.nextSibling.nextSibling.firstChild.nextSibling.innerHTML = msg.last[4].speed;
     document.getElementById('each').firstChild.nextSibling.firstChild.nextSibling.nextSibling.firstChild.nextSibling.nextSibling.innerHTML = msg.last[4].dir;
-    document.getElementById('each').firstChild.nextSibling.firstChild.nextSibling.nextSibling.firstChild.nextSibling.nextSibling.nextSibling.innerHTML = msg.last[4].time;
+    document.getElementById('each').firstChild.nextSibling.firstChild.nextSibling.nextSibling.firstChild.nextSibling.nextSibling.nextSibling.innerHTML = new Date(msg.last[4].time).toString().slice(4, 24);
 
     document.getElementById('each').firstChild.nextSibling.firstChild.nextSibling.nextSibling.nextSibling.nextSibling.firstChild.innerHTML = nodes[msg.last[3].node];
     document.getElementById('each').firstChild.nextSibling.firstChild.nextSibling.nextSibling.nextSibling.nextSibling.firstChild.nextSibling.innerHTML = msg.last[3].speed;
     document.getElementById('each').firstChild.nextSibling.firstChild.nextSibling.nextSibling.nextSibling.nextSibling.firstChild.nextSibling.nextSibling.innerHTML = msg.last[3].dir;
-    document.getElementById('each').firstChild.nextSibling.firstChild.nextSibling.nextSibling.nextSibling.nextSibling.firstChild.nextSibling.nextSibling.nextSibling.innerHTML = msg.last[3].time;
+    document.getElementById('each').firstChild.nextSibling.firstChild.nextSibling.nextSibling.nextSibling.nextSibling.firstChild.nextSibling.nextSibling.nextSibling.innerHTML = new Date(msg.last[4].time).toString().slice(4, 24);
 
     document.getElementById('each').firstChild.nextSibling.firstChild.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.firstChild.innerHTML = nodes[msg.last[2].node];
     document.getElementById('each').firstChild.nextSibling.firstChild.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.firstChild.nextSibling.innerHTML = msg.last[2].speed;
     document.getElementById('each').firstChild.nextSibling.firstChild.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.firstChild.nextSibling.nextSibling.innerHTML = msg.last[2].dir;
-    document.getElementById('each').firstChild.nextSibling.firstChild.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.firstChild.nextSibling.nextSibling.nextSibling.innerHTML = msg.last[2].time;
+    document.getElementById('each').firstChild.nextSibling.firstChild.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.firstChild.nextSibling.nextSibling.nextSibling.innerHTML = new Date(msg.last[2].time).toString().slice(4, 24);
 
     document.getElementById('each').firstChild.nextSibling.firstChild.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.firstChild.innerHTML = nodes[msg.last[1].node];
     document.getElementById('each').firstChild.nextSibling.firstChild.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.firstChild.nextSibling.innerHTML = msg.last[1].speed;
     document.getElementById('each').firstChild.nextSibling.firstChild.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.firstChild.nextSibling.nextSibling.innerHTML = msg.last[1].dir;
-    document.getElementById('each').firstChild.nextSibling.firstChild.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.firstChild.nextSibling.nextSibling.nextSibling.innerHTML = msg.last[1].time;
+    document.getElementById('each').firstChild.nextSibling.firstChild.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.firstChild.nextSibling.nextSibling.nextSibling.innerHTML = new Date(msg.last[1].time).toString().slice(4, 24);
 
     document.getElementById('each').firstChild.nextSibling.firstChild.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.firstChild.innerHTML = nodes[msg.last[0].node];
     document.getElementById('each').firstChild.nextSibling.firstChild.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.firstChild.nextSibling.innerHTML = msg.last[0].speed;
     document.getElementById('each').firstChild.nextSibling.firstChild.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.firstChild.nextSibling.nextSibling.innerHTML = msg.last[0].dir;
-    document.getElementById('each').firstChild.nextSibling.firstChild.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.firstChild.nextSibling.nextSibling.nextSibling.innerHTML = msg.last[0].time;
+    document.getElementById('each').firstChild.nextSibling.firstChild.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.firstChild.nextSibling.nextSibling.nextSibling.innerHTML = new Date(msg.last[0].time).toString().slice(4, 24);
   };
 
   var socket = io();
