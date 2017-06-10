@@ -63,6 +63,18 @@
   //socket.io
   var timeouts = [[],[],[]];
 
+  function func(unit_time) {
+	if((Date.now() - unix_time)/60000)<1) {
+		return Math.round((Date.now() - unix_time)/1000) + ' seconds ago'
+	};
+	else((Date.now() - unix_time)/3600000)>1){
+		return Math.round((Date.now() - unix_time)/3600000) + ' hours ago'
+	};
+	else((){
+		return Math.round((Date.now() - unix_time)/60000) + ' minutes ago'
+	};
+  };
+  
   function updateCount(msg) {
     window.clearTimeout(timeouts[0][0]);
     window.clearTimeout(timeouts[1][0]);
@@ -73,11 +85,12 @@
     document.getElementById('jim').innerHTML = length[0]
     document.getElementById('tim').innerHTML = length[1]
     document.getElementById('herb').innerHTML = length[2]
-    document.getElementById('jimtime').innerHTML = Math.round((Date.now() - Date.parse(msg.lasttime[0]))/60000) + ' minutes ago'
+    //document.getElementById('jimtime').innerHTML = Math.round((Date.now() - Date.parse(msg.lasttime[0]))/60000) + ' minutes ago'
+	document.getElementById('jimtime').innerHTML = func(Date.parse(msg.lasttime[0]))
     timeouts[0][1] = Date.parse(msg.lasttime[0]);
-    document.getElementById('timtime').innerHTML = Math.round((Date.now() - Date.parse(msg.lasttime[1]))/60000) + ' minutes ago'
+    document.getElementById('timtime').innerHTML = func(Date.parse(msg.lasttime[1]))
     timeouts[1][1] = Date.parse(msg.lasttime[1]);
-    document.getElementById('herbtime').innerHTML = Math.round((Date.now() - Date.parse(msg.lasttime[2]))/60000) + ' minutes ago'
+    document.getElementById('herbtime').innerHTML = func(Date.parse(msg.lasttime[2]))
     timeouts[2][1] = Date.parse(msg.lasttime[2]);
 
     timeouts[0][0] = window.setInterval(function(){
