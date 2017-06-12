@@ -11,7 +11,7 @@ var nodes = {"40003b000e51353532343635":"jim"};
 if(process.env.LOGNAME==='meis1124816') {
     var port = 3000;
     //var databaseUrl = "local";
-    mongoose.connect('mongodb://localhost/test');
+    mongoose.connect('mongodb://localhost/local');
 } else {
     var port = 12174;
     mongoose.connect('mongodb://'+process.env.DBUSER+':'+process.env.DBPWD+'@mongodb.cloudno.de:27017/bikes');
@@ -53,15 +53,15 @@ app.get('/input', function(req, res){
   console.log(req.header("speed"));
   console.log(req.header("node"));
   if(req.header("dir")!=undefined&&req.header("speed")!=undefined&&nodes[req.header("node")]!=undefined) {
-    console.log({dir: req.header("dir"), speed: req.header("speed"), node: nodes[req.header("node")]});
-    Bike.create({dir: req.header("dir"), speed: req.header("speed"), node: nodes[req.header("node")]}, function(err, saved) {
+    console.log({dir: req.header("dir"), speed: req.header("speed")*0.6818181818181818, node: nodes[req.header("node")]});
+    Bike.create({dir: req.header("dir"), speed: req.header("speed")*0.6818181818181818, node: nodes[req.header("node")]}, function(err, saved) {
     if( err || !saved ) console.log("bike not saved");
     else console.log("bike saved");
     });
     Bike.find(function (err, bike) {
     if (err) return console.error(err);
       //console.log(bikeCount());
-      bikeCount(function(length, lasttime) {io.emit('bike', {dir: req.header("dir"), speed: req.header("speed"), node: nodes[req.header("node")], last: bike.slice(bike.length-5), length:length, lasttime: lasttime})});
+      bikeCount(function(length, lasttime) {io.emit('bike', {dir: req.header("dir"), speed: req.header("speed")*0.6818181818181818, node: nodes[req.header("node")], last: bike.slice(bike.length-5), length:length, lasttime: lasttime})});
     })
     res.status(202);
     res.send('');
@@ -75,20 +75,26 @@ function bikeCount(fun) {
   var length = [];
   var lasttime = [];
   Bike.find({node:'40003b000e51353532343635'}, function (err, bike) {
-  if (err) return console.error(err);
-  length[0] = bike.length;
-  lasttime[0] = bike[bike.length-1].time;
-  Bike.find({node:'tim'}, function (err, bike) {
-  if (err) return console.error(err);
-  length[1] = bike.length;
-  lasttime[1] = bike[bike.length-1].time;
-  Bike.find({node:'herb'}, function (err, bike) {
-  if (err) return console.error(err);
-  length[2]= bike.length;
-  lasttime[2] = bike[bike.length-1].time;
-  fun(length, lasttime);
-  });
-  });
+    if (err) return console.error(err);
+    length[0] = bike.length;
+    if(bike.length>0) {
+      lasttime[0] = bike[bike.length-1].time;
+      Bike.find({node:'tim'}, function (err, bike) {
+        if (err) return console.error(err);
+        length[1] = bike.length;
+        if(bike.length>0) {
+          lasttime[1] = bike[bike.length-1].time;
+          Bike.find({node:'herb'}, function (err, bike) {
+            if (err) return console.error(err);
+            length[2]= bike.length;
+            if(bike.length>0) {
+              lasttime[2] = bike[bike.length-1].time;
+              fun(length, lasttime);
+            };
+          });
+        };
+      });
+    };
   });
 };
 
