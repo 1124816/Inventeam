@@ -35,8 +35,8 @@
   <script>
   var entries = 5
   //map setup
-  var mymap = L.map('mapid').setView([35.048, -85.31], 14.5);
-  var stations = {"bob":[[35.048353, -85.31035], false], "tim":[[35.047002, -85.31031], false], "jim":[[35.050857, -85.310487], false ], "herb":[[35.049579, -85.310404], false]};
+  var mymap = L.map('mapid').setView([39, -78], 4.5);
+  var stations = {"herb":[[42.359384, -69.6], false], "tim":[[35.047002, -85.31031], false], "jim":[[42.359384, -71.09060883522034], false ]};
   var length = [];
 
   L.tileLayer('https://api.mapbox.com/styles/v1/mapbox/streets-v10/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWVpczExMjQ4MTYiLCJhIjoiY2owNDM5NGtyMGRobjMybHNjMmhwdWlmeCJ9.k9GrsRyZd771jT0BEumf7g', {
@@ -48,17 +48,16 @@
   var nobike = L.icon({
     iconUrl: 'nobike.png',
     iconSize: [30, 60],
-    popupAnchor: [0, -25]
+    iconAnchor: [15, 60]
   });
   var bike = L.icon({
     iconUrl: 'bike.png',
     iconSize: [30, 60],
-    popupAnchor: [0, -25]
+    iconAnchor: [15, 60]
   });
 
   for(i in stations) {
-    stations[i].push(L.marker([stations[i][0][0], stations[i][0][1]], {"riseOnHover":true, "icon": nobike}).addTo(mymap));
-    stations[i].push(stations[i][2].bindPopup('Lots O\' bikes', {"autoClose": false}));
+    stations[i].push(L.marker([stations[i][0][0], stations[i][0][1]], {"riseOnHover":false, "icon": nobike}).addTo(mymap));
   };
 
   //socket.io
