@@ -145,7 +145,8 @@
   };
 
   socket.on('bike',function(msg) {
-    stations[msg.node][3].setIcon(bike)
+    console.log(msg.node);
+    stations[msg.node][2].setIcon(bike)
     window.setTimeout(function(){stations[msg.node][2].setIcon(nobike)}, 600);
     updateCount(msg)
   });
