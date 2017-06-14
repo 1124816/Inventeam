@@ -9,8 +9,6 @@
   <div id="nav">
     <h1 onclick="document.location.href = '/'" id="navh">InvenTeam</h1>
     <h3 onclick="document.location.href = '/about'" id="navh">About Us</h3>
-    <h3 onclick="document.location.href = '/data'" id="navh">Data</h3>
-    <h3 onclick="document.location.href = '/data'" id="navh">Contact Us</h3>
   </div>
   <div id="mapid"></div>
   <table id='table'>
@@ -64,7 +62,7 @@
   var timeouts = [[],[],[]];
 
   function timeParse(unix_time) {
-	if(Math.round(((Date.now() - unix_time)/60000))<1) {
+	if(Math.round(((Date.now() - unix_time)/1000))<1) {
 		if(Math.round(((Date.now() - unix_time)/1000))<2) {
       return Math.round((Date.now() - unix_time)/1000) + ' Second Ago'
     } else {
