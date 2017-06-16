@@ -5,7 +5,7 @@ var path = require('path');
 var io = require('socket.io')(http);
 //var mongo = require('mongojs');
 var mongoose = require('mongoose');
-var nodes = {"40003b000e51353532343635":"jim", "4a005f001051363036373538":"herb", "420043000e51353532343635":"tim"};
+var nodes = {"40003b000e51353532343635":"jim", "4a005f001051363036373538":"tim", "420043000e51353532343635":"herb"};
 
 //Database setup
 if(process.env.LOGNAME==='meis1124816') {
